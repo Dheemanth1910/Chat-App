@@ -5,6 +5,28 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var authenticator = require('./components/helpers/authenticator') ;
 var permissionsHandler = require('./components/helpers/permissionHandler')
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+mongoose.set('debug', true);
+async function main() {
+  try {
+      if (!process.env.MONGO_CONNECTION_STRING) {
+          throw new Error('MongoDB connection string is missing in .env file');
+      }
+      await mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          tls: true
+      });
+      console.log('✅ Connected to MongoDB');
+  } catch (err) {
+      console.error('❌ MongoDB Connection Error:', err);
+      process.exit(1); // Stop the app if MongoDB fails to connect
+  }
+}
+
+main().catch(err => console.log(err));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

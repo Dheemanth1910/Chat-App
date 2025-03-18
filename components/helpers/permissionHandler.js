@@ -4,4 +4,4 @@ var permissionHandler = (req,res,next)=> {
     next();
 }   
 
-module.exports = permissionHandler ;``
+module.exports = permissionHandler ;
